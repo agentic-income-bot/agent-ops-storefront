@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unattended Scheduling Recipes — lock file + logging pattern for agent schedulers</title>
+<meta name="description" content="A tested lock/staleness/logging pattern for running an AI coding agent on a schedule without overlapping runs — macOS launchd, Linux cron, and a native Windows PowerShell/Task Scheduler port. $7 in USDC.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site">
+  <nav>
+    <a class="brand" href="index.html">Agent Ops <span>Starter Kit</span></a>
+    <div class="links">
+      <a href="index.html">Full kit</a>
+      <a href="companion.html">Free guide</a>
+      <a href="checkout.html?product=scheduling-recipes">Buy</a>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <h1>Unattended Scheduling Recipes</h1>
+  <p class="tagline">Just the scheduling layer for running an AI coding agent on a timer — macOS, Linux, or Windows — without two runs overlapping and corrupting each other's work, and with a log you can actually read after the fact.</p>
+
+  <div class="price-row">
+    <span class="price">7 USDC</span>
+    <span class="price-note">one-time purchase &middot; paid on Base &middot; instant download link by email</span>
+  </div>
+
+  <a class="btn" href="checkout.html?product=scheduling-recipes">Buy now</a>
+
+  <h2>Why this exists</h2>
+  <p>The moment you point a scheduler at an agent CLI and walk away, you inherit two problems every cron/launchd tutorial skips: what happens if a run is still going when the next one is due to start, and what happens if a run crashes and leaves something in a bad state for the next one. Get either wrong and you get silent corruption or a permanently stuck job — exactly the kind of failure you won't be watching for, because the point of scheduling it was to stop watching.</p>
+  <p>This is the scheduling half of the <a href="index.html">Agent Ops Starter Kit</a>, split out for people who already have their own agent-memory/state pattern and just want a battle-tested runner.</p>
+
+  <h2>What's included</h2>
+  <ul class="contents">
+    <li><strong>run.sh template</strong> (macOS/Linux) — atomic <code>mkdir</code>-based lock, PID-liveness check to reclaim a stale lock left by a crashed run, one timestamped log file per invocation.</li>
+    <li><strong>launchd plist template</strong> (macOS) — a calendar-interval launchd job pointed at <code>run.sh</code>, with the reasoning for <code>RunAtLoad: false</code> and where stdout/stderr go.</li>
+    <li><strong>Windows PowerShell/Task Scheduler template</strong> — a native port of the exact same lock/staleness/logging pattern, no WSL or Git Bash required.</li>
+    <li><strong>Cron &amp; other schedulers notes</strong> — Linux cron syntax and gotchas, plus when to prefer the native Windows port over a WSL workaround.</li>
+    <li><strong>Design guide</strong> — why a directory as the lock (not a lock file), why PID-liveness instead of a timeout, why per-run log files, and how to pick a scheduler for your platform.</li>
+  </ul>
+
+  <h2>What this is not</h2>
+  <p>Not the full agent-memory/state pattern (mission file, state file, log, human-task queue) — that's the <a href="index.html">Agent Ops Starter Kit</a>, which already includes this scheduling piece. If you don't have your own answer to "how does an agent with no memory between runs know what to do next," get the full kit instead of this and the state pattern separately.</p>
+
+  <h2>Before you buy — the details UK consumer law requires us to give you</h2>
+  <div class="panel">
+    <p><strong>What you get:</strong> the scheduling templates and design guide described above, delivered as a link to download the files, sent to the email address you provide at checkout.</p>
+    <p><strong>Price:</strong> 7 USDC (paid on the Base network), no recurring charges.</p>
+    <p><strong>Delivery:</strong> by automated email, typically within a few hours of your payment being confirmed and always within 24 hours.</p>
+    <p><strong>AI involvement:</strong> this product's content was drafted with AI assistance as part of an AI agent's own operating repo, which is also where the pattern was tested. We say this plainly because we'd want to know it if we were buying.</p>
+    <p><strong>Cancellation rights:</strong> because this is a digital product delivered immediately at your request, UK law requires you to explicitly waive the standard 14-day cancellation right before we can deliver it — you'll be asked to confirm this with a checkbox at checkout.</p>
+  </div>
+
+  <div class="panel ok">
+    <p style="margin:0">Want the full pattern too — state tracking, append-only logging, human-task batching — not just scheduling? The <a href="index.html">Agent Ops Starter Kit</a> includes this and everything else. <a href="checkout.html?product=bundle">Get both for 19 USDC</a> instead of 22 USDC separately.</p>
+  </div>
+
+  <p>Questions before buying? Email <a href="mailto:agentic-income@agentmail.to">agentic-income@agentmail.to</a>.</p>
+</main>
+
+<footer class="site">
+  <p>Agent Ops Starter Kit &middot; <a href="mailto:agentic-income@agentmail.to">agentic-income@agentmail.to</a> &middot; <a href="companion.html">free companion guide</a></p>
+</footer>
+</body>
+</html>

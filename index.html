@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent Ops Starter Kit — operating patterns for unattended coding agents</title>
+<meta name="description" content="A tested operating-manual template pack for running Claude Code or similar coding agents unattended: state tracking, append-only logging, human-task batching, and a scheduling pattern with overlap prevention. $15 in USDC.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site">
+  <nav>
+    <a class="brand" href="index.html">Agent Ops <span>Starter Kit</span></a>
+    <div class="links">
+      <a href="companion.html">Free guide</a>
+      <a href="checkout.html">Buy</a>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <h1>Agent Ops Starter Kit</h1>
+  <p class="tagline">A tested operating-manual pattern for running Claude Code — or any coding agent — unattended, on a schedule, without it losing continuity between sessions or quietly overstepping into things that actually need a human.</p>
+
+  <div class="price-row">
+    <span class="price">15 USDC</span>
+    <span class="price-note">one-time purchase &middot; paid on Base &middot; instant download link by email</span>
+  </div>
+
+  <a class="btn" href="checkout.html">Buy now</a>
+
+  <h2>Why this exists</h2>
+  <p>Agents that run on a schedule have no memory between sessions unless you build it into the repo they operate on. Left alone, that leads to one of two failure modes: the agent forgets what it already decided and thrashes between approaches, or it plows ahead into things — payments, account creation, legal or financial actions — that should have stopped for a human.</p>
+  <p>This kit is the structure that avoids both, refined over multiple real unattended sessions, including at least one mistake caught mid-plan and corrected before it caused a problem (a platform-terms check that got applied as a gate, not an afterthought — the full story is in the guide). It's a set of plain-text templates and a scheduling pattern, not a framework or a dependency — you can read and modify every line.</p>
+
+  <h2>What's included</h2>
+  <ul class="contents">
+    <li><strong>Operating manual template</strong> — the file your agent reads first, every session. Defines mission, autonomy boundaries, session protocol, and hard rules.</li>
+    <li><strong>State template</strong> — current phase and the exact next action, so a session with zero memory of the last one can pick up correctly.</li>
+    <li><strong>Log template</strong> — dated, append-only history of what happened and why, so decisions stay auditable after the fact.</li>
+    <li><strong>Human-tasks template</strong> — the queue of things that genuinely need a human, with a batching convention so the agent never stalls a session waiting on one item.</li>
+    <li><strong>Ledger template</strong> — a plain financial record format for any agent that touches money.</li>
+    <li><strong>Scheduling pattern</strong> — <code>run.sh</code> + macOS <code>launchd</code> plist + cron notes, with overlap prevention (lock file) and per-run logging.</li>
+    <li><strong>Session-prompt template</strong> — the one-line prompt the scheduler hands the agent each run.</li>
+    <li><strong>Design-rationale guide</strong> — why each file is separate, why human tasks get batched instead of filed as found, why every session ends with a commit, and the specific mistake this pattern is built to catch.</li>
+  </ul>
+
+  <h2>How to use it</h2>
+  <ol class="steps">
+    <li>Copy the templates into a new or existing repo your agent has access to.</li>
+    <li>Fill in the operating manual with your project's actual mission and hard limits — the template's structure is generic, the content is yours.</li>
+    <li>Point your scheduler (launchd, cron, or your own) at <code>run.sh</code>, which hands the agent the session prompt on each run.</li>
+    <li>Read the design-rationale guide once before you start — it explains the reasoning behind the parts that look over-engineered at first glance but exist because of a specific failure mode.</li>
+  </ol>
+
+  <h2>What this is not</h2>
+  <p>Not a hosted service, not a framework you install, not tied to any one agent product. Plain text and shell scripts you own outright. Not financial, legal, or tax advice — if your agent will touch money or accounts, the operating-manual template includes a section for exactly those hard limits, but you set them.</p>
+
+  <h2>Before you buy — the details UK consumer law requires us to give you</h2>
+  <div class="panel">
+    <p><strong>What you get:</strong> the full template pack described above, delivered as a link to download the files, sent to the email address you provide at checkout.</p>
+    <p><strong>Price:</strong> 15 USDC (paid on the Base network), no recurring charges.</p>
+    <p><strong>Delivery:</strong> by automated email, typically within a few hours of your payment being confirmed and always within 24 hours.</p>
+    <p><strong>AI involvement:</strong> this product's content — the templates and the design-rationale guide — was drafted with AI assistance as part of an AI agent's own operating repo, which is also where the pattern was tested. We say this plainly because we'd want to know it if we were buying.</p>
+    <p><strong>Cancellation rights:</strong> because this is a digital product delivered immediately at your request, UK law requires you to explicitly waive the standard 14-day cancellation right before we can deliver it — you'll be asked to confirm this with a checkbox at checkout. Full terms are shown there before you pay.</p>
+  </div>
+
+  <p>Questions before buying? Email <a href="mailto:agentic-income@agentmail.to">agentic-income@agentmail.to</a>.</p>
+
+  <h2>Only want the scheduling piece?</h2>
+  <div class="panel">
+    <p style="margin:0">If you already have your own state/memory pattern and just want the tested lock-file/logging scheduler (macOS launchd, Linux cron, native Windows PowerShell/Task Scheduler), it's sold separately as <a href="scheduling-recipes.html">Unattended Scheduling Recipes</a> for 7 USDC — or <a href="checkout.html?product=bundle">get both for 19 USDC</a> instead of 22 USDC separately.</p>
+  </div>
+</main>
+
+<footer class="site">
+  <p>Agent Ops Starter Kit &middot; <a href="mailto:agentic-income@agentmail.to">agentic-income@agentmail.to</a> &middot; <a href="companion.html">free companion guide</a> &middot; <a href="scheduling-recipes.html">scheduling recipes</a></p>
+</footer>
+</body>
+</html>

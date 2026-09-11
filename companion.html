@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What actually needs a human when you run a coding agent unattended</title>
+<meta name="description" content="A pattern for deciding what genuinely needs a human when you run Claude Code or another coding agent unattended: draw the line by category, batch instead of interrupt, escalate on evidence, and check platform terms before the agent acts.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site">
+  <nav>
+    <a class="brand" href="index.html">Agent Ops <span>Starter Kit</span></a>
+    <div class="links">
+      <a href="index.html">Product</a>
+      <a href="checkout.html">Buy</a>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <h1>What actually needs a human when you run a coding agent unattended</h1>
+
+  <p>If you've tried running Claude Code (or any coding agent) on a schedule — cron, launchd, whatever — you hit this problem fast: the agent will eventually reach a step that isn't really its call to make. Opening an account somewhere. Spending money. Anything where "I did it and it turned out fine" isn't good enough, because the failure mode isn't a bug, it's a decision that wasn't the agent's to make in the first place.</p>
+
+  <p>The naive fix is "ask a human whenever you're unsure." In practice this means the very first session stalls on the very first ambiguous step, and an unattended agent that stalls is just an attended agent with extra steps.</p>
+
+  <p>Here's the pattern that actually works, distilled from running one of these for real:</p>
+
+  <h2>1. Draw the line by category, not by instance</h2>
+  <p>Don't evaluate "should I ask about this specific thing" case by case — decide in advance which <em>categories</em> of action always need a human, and write them down somewhere the agent reads every session. Identity verification. Spending above a limit. Signing anything. Creating accounts on platforms whose terms require a human to do so. Once the category is defined, the agent doesn't have to reason from scratch each time it hits an instance of it — it just checks the category.</p>
+
+  <h2>2. Batch, don't interrupt</h2>
+  <p>When the agent hits something in a needs-a-human category, it shouldn't stop and wait. It should log the task, with enough context that the human can act without asking a follow-up question, and then keep working on whatever else is unblocked. The human clears a batch of related tasks in one sitting instead of getting pinged every time the agent hits a wall. This one change is what makes "unattended" actually mean unattended — the agent always has <em>something</em> it can do.</p>
+
+  <h2>3. Escalate when the batch turns out to matter</h2>
+  <p>Batching isn't the same as deprioritizing forever. If it turns out a specific pending item is actually the bottleneck — nothing downstream can proceed without it — that's worth calling out explicitly instead of leaving it to get lost in a pile of lower-stakes housekeeping. The rule: batch by default, escalate on evidence.</p>
+
+  <h2>4. Check platform terms <em>before</em> the agent acts, not after</h2>
+  <p>This is the specific mistake that motivated writing this down: a plan called for the agent to register its own account on a platform whose terms of service require a human to create any account — including a bot/machine account. It got caught before it happened, because the rule "check a platform's terms before any agent-initiated signup" was already in place and got applied as a gate, not an afterthought. Treat ambiguity in the terms the same as a prohibition — if it's not clearly fine, it goes in the human queue.</p>
+
+  <h2>The shape of the rule matters more than the specific list</h2>
+  <p>None of the categories above are exhaustive or universal — yours will differ depending on what your agent actually touches. What transfers is the structure: a written, agent-readable boundary; a queue instead of a stall; batching with an escalation path; and a check that runs <em>before</em> the action, not a review after.</p>
+
+  <div class="panel ok">
+    <p style="margin:0">This is one piece of a small, tested operating-manual pattern for running coding agents unattended — state tracking, append-only logging, and a scheduling setup with overlap prevention, alongside the human-task queue described above. Packaged as the <a href="index.html">Agent Ops Starter Kit</a> if you'd rather start from working templates than rebuild this from scratch.</p>
+  </div>
+</main>
+
+<footer class="site">
+  <p>Agent Ops Starter Kit &middot; <a href="mailto:agentic-income@agentmail.to">agentic-income@agentmail.to</a> &middot; <a href="index.html">product</a></p>
+</footer>
+</body>
+</html>

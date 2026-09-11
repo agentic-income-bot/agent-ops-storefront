@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout — Agent Ops storefront</title>
+<meta name="description" content="Pay in USDC on Base and get your download link by email.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site">
+  <nav>
+    <a class="brand" href="index.html">Agent Ops <span>Starter Kit</span></a>
+    <div class="links">
+      <a href="scheduling-recipes.html">Scheduling Recipes</a>
+      <a href="index.html">Starter Kit</a>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <h1>Checkout</h1>
+
+  <div class="panel">
+    <h3 style="margin-top:0">Order summary</h3>
+    <p id="order-summary">Loading&hellip;</p>
+    <p class="price-note" id="switch-product">
+      Buying something else?
+      <a href="checkout.html?product=starter-kit">Starter Kit (15 USDC)</a> &middot;
+      <a href="checkout.html?product=scheduling-recipes">Scheduling Recipes (7 USDC)</a> &middot;
+      <a href="checkout.html?product=bundle">Bundle (19 USDC)</a>
+    </p>
+  </div>
+
+  <h2>Step 1 — send payment</h2>
+  <p>Send exactly <strong id="amount-copy">&hellip;</strong> to this address. Double-check you're on Base — funds sent on the wrong network can't be recovered.</p>
+  <div class="address-row">
+    <code id="wallet-address">0x0a5e5C99d86D9e20D68f937d86657e5a2651dC91</code>
+    <button class="copy" type="button" id="copy-btn" onclick="copyAddress()">Copy</button>
+  </div>
+  <p class="price-note" id="copy-status" aria-live="polite"></p>
+
+  <h2>Step 2 — confirm and send us your order</h2>
+  <p>Once you've sent the payment, fill this in and click the button below — it opens your email client with a message ready to send to us. We verify the transaction on-chain and reply with your download link(s).</p>
+
+  <form id="order-form">
+    <label for="email">Your email address (for delivery)
+      <input type="email" id="email" required placeholder="you@example.com">
+    </label>
+    <label for="txhash">Transaction hash of your payment
+      <input type="text" id="txhash" required placeholder="0x...">
+    </label>
+
+    <div class="checkbox-row">
+      <input type="checkbox" id="consent" required>
+      <label for="consent">I agree to immediate delivery of this digital product and acknowledge that I lose my right to cancel once download/delivery has begun, per the Consumer Contracts (Information, Cancellation and Additional Charges) Regulations 2013.</label>
+    </div>
+
+    <p style="margin-top:1.5rem">
+      <a class="btn" id="send-btn" href="#" aria-disabled="true">Send order confirmation email</a>
+    </p>
+  </form>
+
+  <div class="panel">
+    <h3 style="margin-top:0">If something goes wrong</h3>
+    <p>Entered the wrong email, or nothing arrives within 24 hours of sending your confirmation? Email <a href="mailto:agentic-income@agentmail.to">agentic-income@agentmail.to</a> with your transaction hash and we'll resend at no extra cost. If we can't fulfil your order for any reason on our side, we'll refund the full amount to the wallet address the payment came from.</p>
+  </div>
+</main>
+
+<footer class="site">
+  <p>Agent Ops Starter Kit &middot; <a href="mailto:agentic-income@agentmail.to">agentic-income@agentmail.to</a> &middot; <a href="companion.html">free companion guide</a></p>
+</footer>
+
+<script>
+var PRODUCTS = {
+  'starter-kit': {
+    name: 'Agent Ops Starter Kit',
+    amount: 15,
+    summary: 'Agent Ops Starter Kit — 15 USDC, paid on Base, one-time purchase.'
+  },
+  'scheduling-recipes': {
+    name: 'Unattended Scheduling Recipes',
+    amount: 7,
+    summary: 'Unattended Scheduling Recipes — 7 USDC, paid on Base, one-time purchase.'
+  },
+  'bundle': {
+    name: 'Agent Ops Starter Kit + Unattended Scheduling Recipes (bundle)',
+    amount: 19,
+    summary: 'Bundle: Agent Ops Starter Kit + Unattended Scheduling Recipes — 19 USDC, paid on Base, one-time purchase (vs. 22 USDC bought separately).'
+  }
+};
+
+function getProductKey() {
+  var params = new URLSearchParams(window.location.search);
+  var key = params.get('product');
+  return PRODUCTS.hasOwnProperty(key) ? key : 'starter-kit';
+}
+
+var productKey = getProductKey();
+var product = PRODUCTS[productKey];
+
+document.getElementById('order-summary').textContent = product.summary + ' Delivered by email within 24 hours of payment confirmation (usually much sooner).';
+document.getElementById('amount-copy').textContent = product.amount + ' USDC on the Base network';
+document.title = 'Checkout — ' + product.name;
+
+function copyAddress() {
+  const text = document.getElementById('wallet-address').textContent;
+  navigator.clipboard.writeText(text).then(function () {
+    document.getElementById('copy-status').textContent = 'Copied.';
+  }, function () {
+    document.getElementById('copy-status').textContent = 'Could not copy automatically — select and copy the address manually.';
+  });
+}
+
+function updateSendLink() {
+  const email = document.getElementById('email').value.trim();
+  const txhash = document.getElementById('txhash').value.trim();
+  const consent = document.getElementById('consent').checked;
+  const btn = document.getElementById('send-btn');
+
+  if (email && txhash && consent) {
+    const subject = encodeURIComponent(product.name + ' order — ' + txhash.slice(0, 10));
+    const body = encodeURIComponent(
+      'Product: ' + product.name + ' (' + product.amount + ' USDC on Base)\n' +
+      'Delivery email: ' + email + '\n' +
+      'Transaction hash: ' + txhash + '\n' +
+      'Consent: I agree to immediate delivery of this digital product and acknowledge that I lose my right to cancel once download/delivery has begun (Consumer Contracts Regulations 2013).\n'
+    );
+    btn.href = 'mailto:agentic-income@agentmail.to?subject=' + subject + '&body=' + body;
+    btn.removeAttribute('aria-disabled');
+  } else {
+    btn.href = '#';
+    btn.setAttribute('aria-disabled', 'true');
+  }
+}
+
+['email', 'txhash', 'consent'].forEach(function (id) {
+  document.getElementById(id).addEventListener('input', updateSendLink);
+});
+
+document.getElementById('send-btn').addEventListener('click', function (e) {
+  if (this.getAttribute('aria-disabled') === 'true') {
+    e.preventDefault();
+  }
+});
+</script>
+</body>
+</html>
